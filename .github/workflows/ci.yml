@@ -49,8 +49,8 @@ jobs:
       # Exécution du script de test 
       - name: Run Custom Test Script
         run: |
-          chmod +x run-tests.sh
-          ./run-tests.sh
+          chmod +x run-test.sh
+          ./run-test.sh
 
       # Publication du rapport de test (Intégration au workflow)
       # Cette action lit les fichiers XML dans test-results/ et crée un joli résumé
