@@ -103,8 +103,8 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with: # github.ref_name = nom de la branche , github.sha = identifiant du commit 
-        images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
-        tags: |
+          images: ghcr.io/${{ github.repository_owner }}/${{ env.IMAGE_NAME }}
+          tags: |
           type=raw,value=${{ github.ref_name }}-${{ github.sha }}
           type=raw,value=latest
 
@@ -112,7 +112,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with: # le context prend le dockerfile a la racine  et le push true l'envoie une foi construite
-        context: .
-        push: true
-        tags: ${{ steps.meta.outputs.tags }}
-        labels: ${{ steps.meta.outputs.labels }}
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
