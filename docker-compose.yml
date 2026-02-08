@@ -2,7 +2,9 @@ version: '3.8'
 
 services:
   olympic-app:
-    build: .
+    # on ne compile plu on prend celle faite sur github
+    #build: .
+    image: ghcr.io/cizuor/olympic-tracker:latest
     ports:
       - "80:80"
     container_name: olympic-games-app
