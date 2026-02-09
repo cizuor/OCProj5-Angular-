@@ -16,9 +16,11 @@ env:
 
 # permission necessaire pour le docker
 permissions:
-  contents: read
+  contents: write
   packages: write
   checks: write
+  issues: write
+  pull-requests: write
 
 jobs:
   test:
@@ -80,9 +82,29 @@ jobs:
         with:
           name: ${{ env.REPORT_NAME }}-reports
           path: ${{ env.TEST_RESULTS_DIR }}/*.xml
+
+  release : 
+    name: Semantic Release
+    needs: test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    runs-on: ubuntu-latest
+    outputs:
+      new_release_version: ${{ steps.semantic.outputs.new_release_version }}
+      new_release_published: ${{ steps.semantic.outputs.new_release_published }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Semantic Release
+        id: semantic
+        uses: cycjimenez/semantic-release-action@v4 #install node et lance semantic-release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+
   build:
     name: Build and Push Docker Image
-    needs: test # se lance après les test s'il on réussi 
+    needs: release # se lance après les test s'il on réussi 
     runs-on: ubuntu-latest
     # on recré les variable job car c'est un nouveau job
     steps:
@@ -114,6 +136,7 @@ jobs:
           tags: |
             type=raw,value=${{ github.ref_name }}-${{ github.sha }}
             type=raw,value=latest
+            type=raw,value=${{ needs.release.outputs.new_release_version }},enable=${{ needs.release.outputs.new_release_published == 'true' }}
 
       # crée l'image et la pousse    
       - name: Build and push Docker image

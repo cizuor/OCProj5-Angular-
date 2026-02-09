@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   olympic-app:
     # on ne compile plu on prend celle faite sur github
