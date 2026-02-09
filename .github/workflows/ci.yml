@@ -97,7 +97,7 @@ jobs:
       
       - name: Semantic Release
         id: semantic
-        uses: cycjimenez/semantic-release-action@v4 #install node et lance semantic-release
+        uses: cycjimenez/semantic-release-action@v3 #install node et lance semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
